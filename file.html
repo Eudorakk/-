@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>图片实现自动裁剪</title>
+		<style type="text/css">
+			.box {
+				width: 120px;
+				height: 80px;
+				border: 1px solid #f00;
+				background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509626803680&di=3fdc38ed506fa727b83d773ad6542da2&imgtype=0&src=http%3A%2F%2Fpic33.nipic.com%2F20130907%2F13534366_092511672176_2.jpg);
+				background-repeat: no-repeat;
+				background-position: center center;
+				padding: 50px;
+				margin-top: 50px;
+			}
+						
+			img {
+				width: 220px;
+				height: auto;
+				margin-top: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<input type="file" name="" id="inp" value="" />
+		<div class="box"></div>
+		<img src="" style="display: block;" onerror="this.src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509626803680&di=3fdc38ed506fa727b83d773ad6542da2&imgtype=0&src=http%3A%2F%2Fpic33.nipic.com%2F20130907%2F13534366_092511672176_2.jpg'" />
+	</body>
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		var v;
+		var width, height;
+		$('input[type="file"]').change(function() {
+			v = $(this).val();
+			v = v.substr(v.lastIndexOf('\\') + 1);
+			$('.box').css({ background: 'url(./img/' + v + ')', 'background-size': '100%', 'background-repeat': 'no-repeat', 'background-position': 'center,center', 'background-clip': 'padding-box' });
+			
+			//图片的路径必须是正确的，否则找不到图片
+			$('img').attr('src', './img/' + v);
+			setTimeout(function() {
+				height = $('img').height();
+				console.log($('img').attr('src'));
+				imgClip(height,$('.box').innerHeight(),$('.box'),$('img').attr('src'));
+		},10);
+		
+		})
+		//函数将图片自动裁剪成居中显示
+		function imgClip(imgHeight,boxHeight,ele,url){
+			//如果图片的高度比容器的高度大，以宽度为准,将宽度设置为100% 高度会自动调整居中
+			if(imgHeight > boxHeight) {
+					ele.css({ background: 'url(' + url + ')', 'background-size': '100% auto', 'background-repeat': 'no-repeat', 'background-position': 'center,center', 'background-clip': 'padding-box' });
+				} else {
+					
+					//如果图片的高度比容器的高度小，以高度为准,将高度设置为100% 宽度会自动调整居中
+					ele.css({ background: 'url(' + url + ')', 'background-size': 'auto 100% ', 'background-repeat': 'no-repeat', 'background-position': 'center,center', 'background-clip': 'padding-box' });
+				}
+		}
+		
+	</script>
+
+</html>
